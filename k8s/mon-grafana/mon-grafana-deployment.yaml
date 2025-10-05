@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mon-grafana
+  labels:
+    app: mon-grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mon-grafana
+  template:
+    metadata:
+      labels:
+        app: mon-grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: "admin123" # Change this in production
+            - name: GF_USERS_ALLOW_SIGN_UP
+              value: "false"
+            - name: GF_INSTALL_PLUGINS
+              value: "grafana-piechart-panel"
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '100m'
+            limits:
+              memory: '1Gi'
+              cpu: '500m'
+          volumeMounts:
+            - name: grafana-storage
+              mountPath: /var/lib/grafana
+            - name: grafana-config
+              mountPath: /etc/grafana/provisioning/datasources
+              readOnly: true
+            - name: grafana-dashboards
+              mountPath: /var/lib/grafana/dashboards
+              readOnly: true
+      volumes:
+        - name: grafana-storage
+          persistentVolumeClaim:
+            claimName: mon-grafana-pvc
+        - name: grafana-config
+          configMap:
+            name: mon-grafana-datasources
+        - name: grafana-dashboards
+          configMap:
+            name: mon-grafana-dashboards

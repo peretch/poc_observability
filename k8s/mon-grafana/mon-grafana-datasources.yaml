@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mon-grafana-datasources
+  labels:
+    app: mon-grafana
+data:
+  prometheus.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://mon-prometheus:9090
+        isDefault: true
+        editable: true
+        jsonData:
+          httpMethod: POST
+          queryTimeout: 60s
+          timeInterval: 5s

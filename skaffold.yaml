@@ -30,6 +30,11 @@ deploy:
       - k8s/mon-prometheus/mon-prometheus-deployment.yaml
       - k8s/mon-prometheus/mon-prometheus-service.yaml
       - k8s/mon-prometheus/mon-prometheus-configmap.yaml
+      - k8s/mon-grafana/mon-grafana-pvc.yaml
+      - k8s/mon-grafana/mon-grafana-deployment.yaml
+      - k8s/mon-grafana/mon-grafana-service.yaml
+      - k8s/mon-grafana/mon-grafana-datasources.yaml
+      - k8s/mon-grafana/mon-grafana-dashboards.yaml
       # Application services
       - k8s/app-hello-world/hello-world-deployment.yaml
       - k8s/app-hello-world/hello-world-service.yaml
@@ -51,6 +56,10 @@ portForward:
     resourceName: mon-prometheus
     port: 9090
     localPort: 9090
+  - resourceType: service
+    resourceName: mon-grafana
+    port: 3000
+    localPort: 3000
   # Infrastructure services (databases)
   - resourceType: service
     resourceName: infra-postgres
