@@ -32,6 +32,13 @@ data:
         metrics_path: '/metrics'  # Endpoint to scrape
         scrape_interval: 5s       # Scrape every 5 seconds
 
+      # Monitor your app-auth service
+      - job_name: 'app-auth'
+        static_configs:
+          - targets: ['app-auth:3001']  # Your auth service
+        metrics_path: '/metrics'  # Endpoint to scrape
+        scrape_interval: 5s       # Scrape every 5 seconds
+
       # Monitor LocalStack (if it exposes metrics)
       - job_name: 'mon-localstack'
         static_configs:

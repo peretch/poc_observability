@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/co
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { SessionsService } from '../sessions/sessions.service';
+import { MetricsService } from '../metrics/metrics.service';
 import { RegisterDto, LoginDto } from './dto/auth.dto';
 import { User } from '@prisma/client';
 
@@ -11,39 +12,47 @@ export class AuthService {
     private usersService: UsersService,
     private sessionsService: SessionsService,
     private jwtService: JwtService,
+    private metricsService: MetricsService,
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const existingUser = await this.usersService.findByEmail(registerDto.email);
-    if (existingUser) {
-      throw new ConflictException('User already exists');
+    try {
+      const existingUser = await this.usersService.findByEmail(registerDto.email);
+      if (existingUser) {
+        this.metricsService.trackAuthAttempt('register', 'failure');
+        throw new ConflictException('User already exists');
+      }
+
+      const user = await this.usersService.create({
+        email: registerDto.email,
+        password: registerDto.password,
+        firstName: registerDto.firstName,
+        lastName: registerDto.lastName,
+        provider: 'local',
+      });
+
+      const session = await this.sessionsService.create(user.id);
+      
+      this.metricsService.trackAuthAttempt('register', 'success');
+      return {
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          avatar: user.avatar,
+        },
+        accessToken: this.jwtService.sign({ 
+          sub: user.id, 
+          email: user.email,
+          sessionId: session.id,
+        }),
+        refreshToken: session.refreshToken,
+      };
+    } catch (error) {
+      this.metricsService.trackAuthAttempt('register', 'failure');
+      throw error;
     }
-
-    const user = await this.usersService.create({
-      email: registerDto.email,
-      password: registerDto.password,
-      firstName: registerDto.firstName,
-      lastName: registerDto.lastName,
-      provider: 'local',
-    });
-
-    const session = await this.sessionsService.create(user.id);
-    
-    return {
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        avatar: user.avatar,
-      },
-      accessToken: this.jwtService.sign({ 
-        sub: user.id, 
-        email: user.email,
-        sessionId: session.id,
-      }),
-      refreshToken: session.refreshToken,
-    };
   }
 
   async login(user: User) {

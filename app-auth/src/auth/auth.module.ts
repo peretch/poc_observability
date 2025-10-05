@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { SessionsModule } from '../sessions/sessions.module';
+import { MetricsModule } from '../metrics/metrics.module';
 
 // Strategies
 import { LocalStrategy } from './strategies/local.strategy';
@@ -18,6 +19,7 @@ import { GithubStrategy } from './strategies/github.strategy';
   imports: [
     UsersModule,
     SessionsModule,
+    MetricsModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
