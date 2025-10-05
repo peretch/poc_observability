@@ -4,9 +4,9 @@ import client from 'prom-client';
 
 // Configure AWS SDK
 AWS.config.update({
-  region: 'us-east-1',
-  accessKeyId: 'test', // Use test credentials for LocalStack
-  secretAccessKey: 'test',
+  region: process.env.AWS_REGION || 'us-east-1',
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'test', // Use test credentials for LocalStack
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test',
 });
 
 const sns = new AWS.SNS({ endpoint: 'http://mon-localstack:4566' });

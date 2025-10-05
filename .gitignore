@@ -1,0 +1,51 @@
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+
+# Secrets and credentials
+secrets/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Kubernetes secrets
+k8s-secrets/
+secrets.yaml
+*-secret.yaml
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/

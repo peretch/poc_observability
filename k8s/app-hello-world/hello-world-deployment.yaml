@@ -21,8 +21,17 @@ spec:
             - containerPort: 3000 # Port the app listens on
           env: # Environment variables for the container
             - name: AWS_ACCESS_KEY_ID
-              value: test # Test credentials for LocalStack
+              valueFrom:
+                secretKeyRef:
+                  name: app-hello-world-secret
+                  key: aws-access-key-id
             - name: AWS_SECRET_ACCESS_KEY
-              value: test
+              valueFrom:
+                secretKeyRef:
+                  name: app-hello-world-secret
+                  key: aws-secret-access-key
             - name: AWS_REGION
-              value: us-east-1
+              valueFrom:
+                secretKeyRef:
+                  name: app-hello-world-secret
+                  key: aws-region
