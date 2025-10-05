@@ -1,11 +1,11 @@
-# mon-localstack - LocalStack Service Help
+# LocalStack Service Help
 
 ## What's in this directory?
 This directory contains Kubernetes manifests for LocalStack (local AWS services simulator).
 
 ## Files:
-- localstack-deployment.yaml: Runs LocalStack container
-- localstack-service.yaml: Exposes LocalStack to other services
+- `localstack-deployment.yaml`: Runs LocalStack container
+- `localstack-service.yaml`: Exposes LocalStack to other services
 
 ## What is LocalStack?
 LocalStack provides local AWS services for development:

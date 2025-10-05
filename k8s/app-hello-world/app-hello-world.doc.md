@@ -1,11 +1,11 @@
-# app-hello-world - Application Service Help
+# Application Service Help
 
 ## What's in this directory?
 This directory contains Kubernetes manifests for your main application service.
 
 ## Files:
-- hello-world-deployment.yaml: Defines how to run your app
-- hello-world-service.yaml: Exposes your app to other services
+- `hello-world-deployment.yaml`: Defines how to run your app
+- `hello-world-service.yaml`: Exposes your app to other services
 
 ## Key Concepts:
 
