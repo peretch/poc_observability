@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: infra-postgres
+  labels:
+    app: infra-postgres
+spec:
+  selector:
+    app: infra-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+  type: ClusterIP

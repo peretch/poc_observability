@@ -1,0 +1,41 @@
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from './prisma/prisma.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { SessionsModule } from './sessions/sessions.module';
+import { HealthController } from './health.controller';
+
+@Module({
+  imports: [
+    // Configuration
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+
+    // Database
+    PrismaModule,
+
+    // Passport for OAuth
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+
+    // JWT
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'your-secret-key',
+      signOptions: {
+        expiresIn: process.env.JWT_EXPIRES_IN || '1h',
+      },
+    }),
+
+    // Feature modules
+    AuthModule,
+    UsersModule,
+    SessionsModule,
+  ],
+  controllers: [HealthController],
+})
+export class AppModule {}

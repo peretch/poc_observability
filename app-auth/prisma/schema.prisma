@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-1.1.x", "linux-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password        String?   // Nullable for OAuth users
+  firstName       String
+  lastName        String
+  avatar          String?
+  isActive        Boolean   @default(true)
+  isEmailVerified Boolean  @default(false)
+  
+  // OAuth providers
+  googleId        String?   @unique
+  githubId        String?   @unique
+  provider        String    @default("local") // 'local', 'google', 'github'
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  sessions        Session[]
+  
+  @@map("users")
+}
+
+model Session {
+  id            String    @id @default(uuid())
+  userId        String
+  sessionToken  String    @unique
+  refreshToken  String    @unique
+  expiresAt     DateTime
+  isActive      Boolean   @default(true)
+  userAgent     String?
+  ipAddress     String?
+  createdAt     DateTime  @default(now())
+  
+  // Relations
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+}
+
+model OAuthProvider {
+  id          String   @id @default(uuid())
+  name        String   @unique // 'google', 'github', etc.
+  clientId    String
+  clientSecret String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("oauth_providers")
+}

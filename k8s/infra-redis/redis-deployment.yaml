@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: infra-redis
+  labels:
+    app: infra-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: infra-redis
+  template:
+    metadata:
+      labels:
+        app: infra-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+          env:
+            # Redis configuration
+            - name: REDIS_PASSWORD
+              value: 'redis'
+          command:
+            - redis-server
+            - --requirepass
+            - redis
+            - --appendonly
+            - 'yes'
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '50m'
+            limits:
+              memory: '256Mi'
+              cpu: '200m'
+          volumeMounts:
+            - name: redis-storage
+              mountPath: /data
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 5
+            periodSeconds: 5
+        volumes:
+          - name: redis-storage
+            persistentVolumeClaim:
+              claimName: redis-pvc

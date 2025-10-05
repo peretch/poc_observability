@@ -8,25 +8,55 @@ build:
       context: app-hello-world
       docker:
         dockerfile: Dockerfile
+    - image: app-auth
+      context: app-auth
+      docker:
+        dockerfile: Dockerfile
   local:
     push: false
 deploy:
   kubectl:
     manifests:
+      # Infrastructure services (databases)
+      - k8s/infra-postgres/postgres-pvc.yaml
+      - k8s/infra-postgres/postgres-deployment.yaml
+      - k8s/infra-postgres/postgres-service.yaml
+      - k8s/infra-redis/redis-pvc.yaml
+      - k8s/infra-redis/redis-deployment.yaml
+      - k8s/infra-redis/redis-service.yaml
+      # Monitoring services
       - k8s/mon-localstack/localstack-deployment.yaml
       - k8s/mon-localstack/localstack-service.yaml
-      - k8s/app-hello-world/hello-world-deployment.yaml
-      - k8s/app-hello-world/hello-world-service.yaml
-      - k8s-secrets/app-hello-world-secret.yaml
       - k8s/mon-prometheus/mon-prometheus-deployment.yaml
       - k8s/mon-prometheus/mon-prometheus-service.yaml
       - k8s/mon-prometheus/mon-prometheus-configmap.yaml
+      # Application services
+      - k8s/app-hello-world/hello-world-deployment.yaml
+      - k8s/app-hello-world/hello-world-service.yaml
+      - k8s-secrets/app-hello-world-secret.yaml
+      - k8s/app-auth/auth-deployment.yaml
+      - k8s/app-auth/auth-service.yaml
 portForward:
+  # Application services
   - resourceType: service
     resourceName: app-hello-world
     port: 3000
     localPort: 3000
   - resourceType: service
+    resourceName: app-auth
+    port: 3001
+    localPort: 3001
+  # Monitoring services
+  - resourceType: service
     resourceName: mon-prometheus
     port: 9090
     localPort: 9090
+  # Infrastructure services (databases)
+  - resourceType: service
+    resourceName: infra-postgres
+    port: 5432
+    localPort: 5432
+  - resourceType: service
+    resourceName: infra-redis
+    port: 6379
+    localPort: 6379

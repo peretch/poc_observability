@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-auth
+  labels:
+    app: app-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-auth
+  template:
+    metadata:
+      labels:
+        app: app-auth
+    spec:
+      containers:
+      - name: app-auth
+        image: app-auth
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3001
+        env:
+        # Database configuration
+        - name: DATABASE_URL
+          value: "postgresql://postgres:postgres@infra-postgres:5432/microservices_db"
+        # Redis configuration
+        - name: REDIS_HOST
+          value: "infra-redis"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_PASSWORD
+          value: "redis"
+        # JWT configuration
+        - name: JWT_SECRET
+          value: "your-super-secret-jwt-key-change-in-production"
+        - name: JWT_EXPIRES_IN
+          value: "1h"
+        # OAuth configuration
+        - name: GOOGLE_CLIENT_ID
+          value: "your-google-client-id"
+        - name: GOOGLE_CLIENT_SECRET
+          value: "your-google-client-secret"
+        - name: GOOGLE_CALLBACK_URL
+          value: "http://localhost:3001/api/v1/auth/google/callback"
+        - name: GITHUB_CLIENT_ID
+          value: "your-github-client-id"
+        - name: GITHUB_CLIENT_SECRET
+          value: "your-github-client-secret"
+        - name: GITHUB_CALLBACK_URL
+          value: "http://localhost:3001/api/v1/auth/github/callback"
+        # App configuration
+        - name: PORT
+          value: "3001"
+        - name: NODE_ENV
+          value: "development"
+        - name: FRONTEND_URL
+          value: "http://localhost:3000"
+        - name: ALLOWED_ORIGINS
+          value: "http://localhost:3000,http://localhost:3001"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 5
+          periodSeconds: 5

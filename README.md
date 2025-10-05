@@ -8,7 +8,7 @@ This project follows a structured naming convention:
 
 - **`app-*`**: Application microservices (e.g., `app-hello-world`, `app-user-service`)
 - **`mon-*`**: Monitoring and observability services (e.g., `mon-prometheus`, `mon-grafana`)
-- **`infra-*`**: Infrastructure services (e.g., `infra-localstack`, `infra-redis`)
+- **`infra-*`**: Infrastructure services (e.g., `infra-postgres`, `infra-redis`, `infra-localstack`)
 
 ## Current Architecture
 
@@ -20,10 +20,10 @@ This project follows a structured naming convention:
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │
          ▼
-┌─────────────────┐
-│   Kubernetes    │
-│   (Skaffold)    │
-└─────────────────┘
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Kubernetes    │    │   infra-postgres│    │   infra-redis    │
+│   (Skaffold)    │    │   (Database)    │    │   (Cache)        │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
 ### Components
@@ -38,6 +38,18 @@ This project follows a structured naming convention:
 
   - SNS service for message publishing
   - Port: 4566
+
+- **infra-postgres**: PostgreSQL database
+
+  - Database: microservices_db
+  - Port: 5432
+  - Username: postgres, Password: postgres
+
+- **infra-redis**: Redis cache database
+
+  - Port: 6379
+  - Password: redis
+  - AOF persistence enabled
 
 - **Kubernetes**: Container orchestration
   - Managed by Skaffold for development workflow
@@ -72,10 +84,20 @@ This project follows a structured naming convention:
    curl http://localhost:3000
    ```
 
-4. **Access Prometheus**:
+4. **Access Services**:
+
    ```bash
-   # Prometheus will be available at http://localhost:9090
-   # You can check targets and metrics there
+   # Application
+   curl http://localhost:3000
+   curl http://localhost:3000/health
+   curl http://localhost:3000/metrics
+
+   # Monitoring
+   # Prometheus: http://localhost:9090
+
+   # Databases
+   # PostgreSQL: localhost:5432 (postgres/postgres)
+   # Redis: localhost:6379 (password: redis)
    ```
 
 ## Observability Roadmap
@@ -225,6 +247,14 @@ microservices_poc/
 │   ├── app-hello-world/         # Hello World service manifests
 │   │   ├── hello-world-deployment.yaml
 │   │   └── hello-world-service.yaml
+│   ├── infra-postgres/          # PostgreSQL database manifests
+│   │   ├── postgres-deployment.yaml
+│   │   ├── postgres-service.yaml
+│   │   └── help.txt
+│   ├── infra-redis/             # Redis cache manifests
+│   │   ├── redis-deployment.yaml
+│   │   ├── redis-service.yaml
+│   │   └── help.txt
 │   ├── mon-localstack/          # LocalStack manifests
 │   │   ├── localstack-deployment.yaml
 │   │   └── localstack-service.yaml
