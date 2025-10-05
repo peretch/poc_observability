@@ -1,0 +1,31 @@
+apiVersion: skaffold/v2beta23
+kind: Config
+metadata:
+  name: microservices-demo
+build:
+  artifacts:
+    - image: app-hello-world
+      context: app-hello-world
+      docker:
+        dockerfile: Dockerfile
+  local:
+    push: false
+deploy:
+  kubectl:
+    manifests:
+      - k8s/mon-localstack/localstack-deployment.yaml
+      - k8s/mon-localstack/localstack-service.yaml
+      - k8s/app-hello-world/hello-world-deployment.yaml
+      - k8s/app-hello-world/hello-world-service.yaml
+      - k8s/mon-prometheus/mon-prometheus-deployment.yaml
+      - k8s/mon-prometheus/mon-prometheus-service.yaml
+      - k8s/mon-prometheus/mon-prometheus-configmap.yaml
+portForward:
+  - resourceType: service
+    resourceName: app-hello-world
+    port: 3000
+    localPort: 3000
+  - resourceType: service
+    resourceName: mon-prometheus
+    port: 9090
+    localPort: 9090

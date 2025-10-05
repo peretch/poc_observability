@@ -1,0 +1,16 @@
+# Service: Exposes Prometheus web UI and API
+# Allows access to Prometheus from outside the cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: mon-prometheus # Service name (DNS: mon-prometheus:9090)
+  labels:
+    app: mon-prometheus
+spec:
+  selector:
+    app: mon-prometheus # Routes to Prometheus pods
+  ports:
+    - protocol: TCP
+      port: 9090 # Service port
+      targetPort: 9090 # Container port
+  type: ClusterIP # Internal cluster access only

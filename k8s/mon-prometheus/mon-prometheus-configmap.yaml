@@ -1,0 +1,40 @@
+# ConfigMap: Contains Prometheus configuration
+# Defines which services to scrape for metrics
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mon-prometheus-config
+  labels:
+    app: mon-prometheus
+data:
+  prometheus.yml: |
+    # Global Prometheus settings
+    global:
+      scrape_interval: 15s      # How often to scrape metrics
+      evaluation_interval: 15s  # How often to evaluate rules
+
+    # Alert rules (currently disabled)
+    rule_files:
+      # - "first_rules.yml"
+      # - "second_rules.yml"
+
+    # Scrape configurations - defines what to monitor
+    scrape_configs:
+      # Monitor Prometheus itself
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']  # Prometheus self-monitoring
+
+      # Monitor your app-hello-world service
+      - job_name: 'app-hello-world'
+        static_configs:
+          - targets: ['app-hello-world:3000']  # Your app service
+        metrics_path: '/metrics'  # Endpoint to scrape
+        scrape_interval: 5s       # Scrape every 5 seconds
+
+      # Monitor LocalStack (if it exposes metrics)
+      - job_name: 'mon-localstack'
+        static_configs:
+          - targets: ['mon-localstack:4566']  # LocalStack service
+        metrics_path: '/metrics'
+        scrape_interval: 15s

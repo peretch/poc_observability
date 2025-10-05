@@ -1,0 +1,48 @@
+# Deployment: Runs Prometheus (metrics collection and monitoring)
+# Scrapes metrics from your services and stores time-series data
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mon-prometheus
+  labels:
+    app: mon-prometheus
+spec:
+  replicas: 1 # Single instance for development
+  selector:
+    matchLabels:
+      app: mon-prometheus
+  template:
+    metadata:
+      labels:
+        app: mon-prometheus
+    spec:
+      containers:
+        - name: mon-prometheus
+          image: prom/prometheus:latest # Official Prometheus image
+          ports:
+            - containerPort: 9090 # Prometheus web UI port
+          args: # Prometheus command line arguments
+            - '--config.file=/etc/prometheus/prometheus.yml' # Config file location
+            - '--storage.tsdb.path=/prometheus/' # Data storage path
+            - '--web.console.libraries=/etc/prometheus/console_libraries'
+            - '--web.console.templates=/etc/prometheus/consoles'
+            - '--storage.tsdb.retention.time=200h' # Keep data for 200 hours
+            - '--web.enable-lifecycle' # Enable config reload via API
+          volumeMounts: # Mount config and storage
+            - name: prometheus-config
+              mountPath: /etc/prometheus/ # Config files location
+            - name: prometheus-storage
+              mountPath: /prometheus/ # Data storage location
+          resources: # Resource limits for stability
+            requests:
+              memory: '512Mi' # Minimum memory
+              cpu: '250m' # Minimum CPU
+            limits:
+              memory: '1Gi' # Maximum memory
+              cpu: '500m' # Maximum CPU
+      volumes:
+        - name: prometheus-config
+          configMap:
+            name: mon-prometheus-config # ConfigMap with scraping config
+        - name: prometheus-storage
+          emptyDir: {} # Temporary storage (data lost on restart)

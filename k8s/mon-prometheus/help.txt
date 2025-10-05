@@ -1,0 +1,63 @@
+# mon-prometheus - Prometheus Monitoring Help
+
+## What's in this directory?
+This directory contains Kubernetes manifests for Prometheus (metrics collection and monitoring).
+
+## Files:
+- mon-prometheus-deployment.yaml: Runs Prometheus server
+- mon-prometheus-service.yaml: Exposes Prometheus web UI
+- mon-prometheus-configmap.yaml: Configuration for scraping targets
+
+## What is Prometheus?
+Prometheus is a monitoring system that:
+- Scrapes metrics from your applications
+- Stores time-series data
+- Provides query language (PromQL)
+- Supports alerting and visualization
+
+## Key Components:
+
+### Deployment
+- **Image**: prom/prometheus:latest
+- **Port**: 9090 (web UI)
+- **Storage**: 200 hours retention
+- **Resources**: 512Mi-1Gi memory, 250m-500m CPU
+
+### Service
+- **Type**: ClusterIP (internal access)
+- **Port**: 9090
+- **DNS**: mon-prometheus:9090
+
+### ConfigMap
+- **Purpose**: Contains prometheus.yml configuration
+- **Scrape targets**: Defines what to monitor
+- **Intervals**: How often to collect metrics
+
+## Scraping Configuration:
+- **app-hello-world**: Your main application (every 5s)
+- **mon-localstack**: LocalStack service (every 15s)
+- **prometheus**: Self-monitoring (every 15s)
+
+## Accessing Prometheus:
+1. Port-forward: kubectl port-forward svc/mon-prometheus 9090:9090
+2. Open: http://localhost:9090
+3. Check targets: Status → Targets
+4. Query metrics: Graph → Enter PromQL query
+
+## Common PromQL queries:
+```promql
+# HTTP requests per second
+rate(http_requests_total[5m])
+
+# Memory usage
+container_memory_usage_bytes
+
+# CPU usage
+rate(container_cpu_usage_seconds_total[5m])
+```
+
+## Next steps:
+- Add Prometheus client to your Node.js app
+- Create custom metrics
+- Set up Grafana for visualization
+- Configure alerting rules

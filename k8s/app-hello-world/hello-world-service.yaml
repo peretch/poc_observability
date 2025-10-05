@@ -1,0 +1,14 @@
+# Service: Exposes your app to other services in the cluster
+# Acts like a load balancer for your pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-hello-world # Service name (DNS name in cluster)
+spec:
+  selector:
+    app: app-hello-world # Routes traffic to pods with this label
+  ports:
+    - protocol: TCP
+      port: 3000 # Port exposed by the service
+      targetPort: 3000 # Port on the pod containers
+

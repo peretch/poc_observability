@@ -1,0 +1,28 @@
+# Deployment: Manages a set of identical pods (replicas)
+# This ensures your app-hello-world service runs reliably
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-hello-world # Name of this deployment
+spec:
+  replicas: 1 # Number of pod instances to run (1 for development)
+  selector:
+    matchLabels:
+      app: app-hello-world # Labels to match pods
+  template:
+    metadata:
+      labels:
+        app: app-hello-world # Labels applied to pods
+    spec:
+      containers:
+        - name: app-hello-world
+          image: app-hello-world # Docker image to run
+          ports:
+            - containerPort: 3000 # Port the app listens on
+          env: # Environment variables for the container
+            - name: AWS_ACCESS_KEY_ID
+              value: test # Test credentials for LocalStack
+            - name: AWS_SECRET_ACCESS_KEY
+              value: test
+            - name: AWS_REGION
+              value: us-east-1

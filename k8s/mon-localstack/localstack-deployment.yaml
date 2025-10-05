@@ -1,0 +1,27 @@
+# Deployment: Runs LocalStack (local AWS services simulator)
+# Provides SNS, SQS, S3, etc. for local development
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mon-localstack # LocalStack deployment name
+spec:
+  replicas: 1 # Only need one instance
+  selector:
+    matchLabels:
+      app: mon-localstack # Label selector for pods
+  template:
+    metadata:
+      labels:
+        app: mon-localstack # Labels applied to pods
+    spec:
+      containers:
+        - name: mon-localstack
+          image: localstack/localstack:latest # Official LocalStack image
+          ports:
+            - containerPort: 4566 # Main LocalStack port
+            - containerPort: 4571 # Additional LocalStack port
+          env: # LocalStack configuration
+            - name: SERVICES
+              value: 'sns' # Only enable SNS service (saves resources)
+            - name: DEBUG
+              value: '1' # Enable debug logging

@@ -1,0 +1,15 @@
+# Service: Exposes LocalStack to other services
+# Allows your app to connect to local AWS services
+apiVersion: v1
+kind: Service
+metadata:
+  name: mon-localstack # Service name (DNS: mon-localstack:4566)
+  labels:
+    app: mon-localstack # Service labels
+spec:
+  ports:
+    - port: 4566 # Service port
+      targetPort: 4566 # Container port
+      name: http # Port name
+  selector:
+    app: mon-localstack # Routes to pods with this label
