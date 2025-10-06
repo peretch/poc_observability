@@ -12,6 +12,10 @@ build:
       context: app-auth
       docker:
         dockerfile: Dockerfile
+    - image: app-books
+      context: app-books
+      docker:
+        dockerfile: Dockerfile
   local:
     push: false
 deploy:
@@ -41,6 +45,8 @@ deploy:
       - k8s-secrets/app-hello-world-secret.yaml
       - k8s/app-auth/auth-deployment.yaml
       - k8s/app-auth/auth-service.yaml
+      - k8s/app-books/books-deployment.yaml
+      - k8s/app-books/books-service.yaml
 portForward:
   # Application services
   - resourceType: service
@@ -51,6 +57,10 @@ portForward:
     resourceName: app-auth
     port: 3001
     localPort: 3001
+  - resourceType: service
+    resourceName: app-books
+    port: 3002
+    localPort: 3002
   # Monitoring services
   - resourceType: service
     resourceName: mon-prometheus

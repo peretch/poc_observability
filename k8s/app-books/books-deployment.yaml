@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-books
+  labels:
+    app: app-books
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-books
+  template:
+    metadata:
+      labels:
+        app: app-books
+    spec:
+      containers:
+        - name: app-books
+          image: app-books
+          imagePullPolicy: Never # Added to prevent pulling from remote registry
+          ports:
+            - containerPort: 3002
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://postgres:postgres@infra-postgres:5432/microservices_db?schema=public"
+            - name: JWT_SECRET
+              value: "your-super-secret-jwt-key-change-in-production" # Replace with a Kubernetes Secret in production
+            - name: JWT_EXPIRES_IN
+              value: "1h"
+            - name: AUTH_SERVICE_URL
+              value: "http://app-auth:3001"
+            - name: PORT
+              value: "3002"
+            - name: NODE_ENV
+              value: "development"
+            - name: ALLOWED_ORIGINS
+              value: "http://localhost:3000,http://localhost:3001,http://localhost:3002"
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '50m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 3002
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 3002
+            initialDelaySeconds: 5
+            periodSeconds: 5

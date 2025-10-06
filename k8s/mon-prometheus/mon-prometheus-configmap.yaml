@@ -39,6 +39,13 @@ data:
         metrics_path: '/metrics'  # Endpoint to scrape
         scrape_interval: 5s       # Scrape every 5 seconds
 
+      # Monitor your app-books service
+      - job_name: 'app-books'
+        static_configs:
+          - targets: ['app-books:3002']  # Your books service
+        metrics_path: '/metrics'  # Endpoint to scrape
+        scrape_interval: 5s       # Scrape every 5 seconds
+
       # Monitor LocalStack (if it exposes metrics)
       - job_name: 'mon-localstack'
         static_configs:
