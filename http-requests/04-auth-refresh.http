@@ -1,0 +1,11 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@refresh_token=YOUR_REFRESH_TOKEN_HERE
+
+### Refresh JWT token
+POST {{auth_url}}/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refresh_token}}"
+}

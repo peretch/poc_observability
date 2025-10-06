@@ -1,0 +1,17 @@
+### Variables for this request
+@books_url=http://localhost:3002
+@jwt_token=YOUR_JWT_TOKEN_HERE
+@sample_book_title_2=1984
+@sample_book_year_2=1949
+@sample_book_author_2=George Orwell
+
+### Create a book with minimal data (requires JWT token)
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "{{sample_book_title_2}}",
+  "year": "{{sample_book_year_2}}",
+  "author": "{{sample_book_author_2}}"
+}

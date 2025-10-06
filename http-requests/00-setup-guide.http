@@ -1,0 +1,89 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@books_url=http://localhost:3002
+@hello_world_url=http://localhost:3000
+@test_email=john.doe@example.com
+@test_password=password123
+@test_first_name=John
+@test_last_name=Doe
+@jwt_token=YOUR_JWT_TOKEN_HERE
+@sample_book_title=The Great Gatsby
+@sample_book_year=1925
+@sample_book_author=F. Scott Fitzgerald
+@sample_book_description=A classic American novel about the Jazz Age
+
+### Setup Guide for HTTP Requests
+### Follow these steps to get started with testing your microservices
+
+### Step 1: Verify all services are running
+GET {{books_url}}/api/v1/health
+
+###
+
+GET {{auth_url}}/api/v1/health
+
+###
+
+GET {{hello_world_url}}/health
+
+###
+
+### Step 2: Register a test user
+POST {{auth_url}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{test_email}}",
+  "password": "{{test_password}}",
+  "firstName": "{{test_first_name}}",
+  "lastName": "{{test_last_name}}"
+}
+
+###
+
+### Step 3: Login to get JWT token
+POST {{auth_url}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{test_email}}",
+  "password": "{{test_password}}"
+}
+
+###
+
+### Step 4: Copy the JWT token from the response above
+### Then set it in the variables file:
+### @jwt_token = YOUR_ACTUAL_JWT_TOKEN_HERE
+
+### Step 5: Test books API with the JWT token
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "{{sample_book_title}}",
+  "year": "{{sample_book_year}}",
+  "author": "{{sample_book_author}}",
+  "description": "{{sample_book_description}}"
+}
+
+###
+
+### Step 6: List your books
+GET {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Step 7: Check metrics
+GET {{books_url}}/api/v1/metrics
+
+###
+
+GET {{auth_url}}/api/v1/metrics
+
+###
+
+### Step 8: Check Hello World service
+GET {{hello_world_url}}/metrics

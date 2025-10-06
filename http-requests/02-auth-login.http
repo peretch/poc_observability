@@ -1,0 +1,13 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@test_email=john.doe@example.com
+@test_password=password123
+
+### Login with existing user
+POST {{auth_url}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{test_email}}",
+  "password": "{{test_password}}"
+}

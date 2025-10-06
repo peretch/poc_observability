@@ -1,0 +1,17 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@test_email=john.doe@example.com
+@test_password=password123
+@test_first_name=John
+@test_last_name=Doe
+
+### Register a new user
+POST {{auth_url}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{test_email}}",
+  "password": "{{test_password}}",
+  "firstName": "{{test_first_name}}",
+  "lastName": "{{test_last_name}}"
+}

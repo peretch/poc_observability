@@ -1,0 +1,110 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@books_url=http://localhost:3002
+@test_email_2=jane.smith@example.com
+@test_password_2=securepassword123
+@test_first_name_2=Jane
+@test_last_name_2=Smith
+@jwt_token=YOUR_JWT_TOKEN_HERE
+@book_id=YOUR_BOOK_ID_HERE
+@sample_book_title_3=Pride and Prejudice
+@sample_book_year_3=1813
+@sample_book_author_3=Jane Austen
+@sample_book_description_3=A romantic novel of manners
+
+### Complete Workflow Example
+### Step 1: Register a new user
+POST {{auth_url}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{test_email_2}}",
+  "password": "{{test_password_2}}",
+  "firstName": "{{test_first_name_2}}",
+  "lastName": "{{test_last_name_2}}"
+}
+
+###
+
+### Step 2: Login to get JWT token
+POST {{auth_url}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{test_email_2}}",
+  "password": "{{test_password_2}}"
+}
+
+###
+
+### Step 3: Create multiple books (use JWT from Step 2)
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "To Kill a Mockingbird",
+  "year": "1960",
+  "author": "Harper Lee",
+  "description": "A novel about racial injustice and childhood innocence"
+}
+
+###
+
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "{{sample_book_title_3}}",
+  "year": "{{sample_book_year_3}}",
+  "author": "{{sample_book_author_3}}",
+  "description": "{{sample_book_description_3}}"
+}
+
+###
+
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "The Catcher in the Rye",
+  "year": "1951",
+  "author": "J.D. Salinger"
+}
+
+###
+
+### Step 4: List all books
+GET {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Step 5: Update a book (use book ID from Step 4)
+PATCH {{books_url}}/api/v1/books/{{book_id}}
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "description": "A coming-of-age story about teenage rebellion and alienation"
+}
+
+###
+
+### Step 6: Get specific book
+GET {{books_url}}/api/v1/books/{{book_id}}
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Step 7: Delete a book
+DELETE {{books_url}}/api/v1/books/{{book_id}}
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Step 8: Verify books list after deletion
+GET {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}

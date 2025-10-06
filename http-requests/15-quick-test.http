@@ -1,0 +1,28 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@books_url=http://localhost:3002
+@hello_world_url=http://localhost:3000
+
+### Quick Test - Verify all services are running
+GET {{hello_world_url}}/health
+
+###
+
+GET {{auth_url}}/api/v1/health
+
+###
+
+GET {{books_url}}/api/v1/health
+
+###
+
+### Quick Test - Check metrics endpoints
+GET {{hello_world_url}}/metrics
+
+###
+
+GET {{auth_url}}/api/v1/metrics
+
+###
+
+GET {{books_url}}/api/v1/metrics

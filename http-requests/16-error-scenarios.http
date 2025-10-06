@@ -1,0 +1,77 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@books_url=http://localhost:3002
+@test_email=john.doe@example.com
+@test_password=password123
+@test_first_name=John
+@test_last_name=Doe
+@jwt_token=YOUR_JWT_TOKEN_HERE
+
+### Error Scenarios Testing
+
+### 1. Register with invalid email
+POST {{auth_url}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "invalid-email",
+  "password": "{{test_password}}",
+  "firstName": "{{test_first_name}}",
+  "lastName": "{{test_last_name}}"
+}
+
+###
+
+### 2. Login with wrong password
+POST {{auth_url}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{test_email}}",
+  "password": "wrongpassword"
+}
+
+###
+
+### 3. Access books without JWT token
+GET {{books_url}}/api/v1/books
+
+###
+
+### 4. Access books with invalid JWT token
+GET {{books_url}}/api/v1/books
+Authorization: Bearer invalid_token_here
+
+###
+
+### 5. Create book without required fields
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "Incomplete Book"
+}
+
+###
+
+### 6. Access non-existent book
+GET {{books_url}}/api/v1/books/non-existent-id
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### 7. Update non-existent book
+PATCH {{books_url}}/api/v1/books/non-existent-id
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "Updated Title"
+}
+
+###
+
+### 8. Delete non-existent book
+DELETE {{books_url}}/api/v1/books/non-existent-id
+Authorization: Bearer {{jwt_token}}

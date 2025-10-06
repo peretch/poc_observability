@@ -1,0 +1,17 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@books_url=http://localhost:3002
+@hello_world_url=http://localhost:3000
+
+### Health check - Auth service
+GET {{auth_url}}/api/v1/health
+
+###
+
+### Health check - Books service
+GET {{books_url}}/api/v1/health
+
+###
+
+### Health check - Hello World service
+GET {{hello_world_url}}/health

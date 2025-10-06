@@ -1,0 +1,7 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@jwt_token=YOUR_JWT_TOKEN_HERE
+
+### Get user profile (requires JWT token)
+GET {{auth_url}}/api/v1/auth/profile
+Authorization: Bearer {{jwt_token}}

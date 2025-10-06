@@ -1,0 +1,19 @@
+### Variables for this request
+@books_url=http://localhost:3002
+@jwt_token=YOUR_JWT_TOKEN_HERE
+@sample_book_title=The Great Gatsby
+@sample_book_year=1925
+@sample_book_author=F. Scott Fitzgerald
+@sample_book_description=A classic American novel about the Jazz Age
+
+### Create a new book (requires JWT token)
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "{{sample_book_title}}",
+  "year": "{{sample_book_year}}",
+  "author": "{{sample_book_author}}",
+  "description": "{{sample_book_description}}"
+}

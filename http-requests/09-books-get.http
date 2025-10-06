@@ -1,0 +1,8 @@
+### Variables for this request
+@books_url=http://localhost:3002
+@jwt_token=YOUR_JWT_TOKEN_HERE
+@book_id=YOUR_BOOK_ID_HERE
+
+### Get a specific book by ID (requires JWT token)
+GET {{books_url}}/api/v1/books/{{book_id}}
+Authorization: Bearer {{jwt_token}}

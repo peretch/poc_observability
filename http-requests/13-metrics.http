@@ -1,0 +1,17 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@books_url=http://localhost:3002
+@hello_world_url=http://localhost:3000
+
+### Prometheus metrics - Auth service
+GET {{auth_url}}/api/v1/metrics
+
+###
+
+### Prometheus metrics - Books service
+GET {{books_url}}/api/v1/metrics
+
+###
+
+### Prometheus metrics - Hello World service
+GET {{hello_world_url}}/metrics

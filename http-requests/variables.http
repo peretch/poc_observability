@@ -1,0 +1,57 @@
+### Variables for HTTP Requests
+### These are working variables based on your microservices setup
+
+### Service URLs (based on your port forwarding)
+@auth_url=http://localhost:3001
+@books_url=http://localhost:3002
+@hello_world_url=http://localhost:3000
+@prometheus_url=http://localhost:9090
+@grafana_url=http://localhost:3000
+
+### Test User Credentials (ready to use)
+@test_email=john.doe@example.com
+@test_password=password123
+@test_first_name=John
+@test_last_name=Doe
+
+### Alternative Test User
+@test_email_2=jane.smith@example.com
+@test_password_2=securepassword123
+@test_first_name_2=Jane
+@test_last_name_2=Smith
+
+### Sample Book Data
+@sample_book_title=The Great Gatsby
+@sample_book_year=1925
+@sample_book_author=F. Scott Fitzgerald
+@sample_book_description=A classic American novel about the Jazz Age
+
+### Sample Book Data 2
+@sample_book_title_2=1984
+@sample_book_year_2=1949
+@sample_book_author_2=George Orwell
+@sample_book_description_2=A dystopian social science fiction novel
+
+### Sample Book Data 3
+@sample_book_title_3=Pride and Prejudice
+@sample_book_year_3=1813
+@sample_book_author_3=Jane Austen
+@sample_book_description_3=A romantic novel of manners
+
+### Dynamic Variables (set these from responses)
+# @jwt_token=YOUR_JWT_TOKEN_FROM_LOGIN_RESPONSE
+# @refresh_token=YOUR_REFRESH_TOKEN_FROM_LOGIN_RESPONSE
+# @user_id=YOUR_USER_ID_FROM_LOGIN_RESPONSE
+# @book_id=YOUR_BOOK_ID_FROM_CREATE_RESPONSE
+
+### Usage Examples:
+### 1. Use service URLs: {{auth_url}}/api/v1/auth/login
+### 2. Use test credentials: {{test_email}} and {{test_password}}
+### 3. Use sample book data: {{sample_book_title}}
+### 4. Set dynamic variables from responses and use: {{jwt_token}}
+
+### Quick Test Commands:
+### Register: POST {{auth_url}}/api/v1/auth/register
+### Login: POST {{auth_url}}/api/v1/auth/login
+### Create Book: POST {{books_url}}/api/v1/books
+### Health Check: GET {{books_url}}/api/v1/health

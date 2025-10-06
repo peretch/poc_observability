@@ -1,0 +1,7 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@jwt_token=YOUR_JWT_TOKEN_HERE
+
+### Logout user (requires JWT token)
+POST {{auth_url}}/api/v1/auth/logout
+Authorization: Bearer {{jwt_token}}

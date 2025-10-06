@@ -1,0 +1,127 @@
+### Variables for this request
+@auth_url=http://localhost:3001
+@books_url=http://localhost:3002
+@hello_world_url=http://localhost:3000
+@test_email=john.doe@example.com
+@test_password=password123
+@test_first_name=John
+@test_last_name=Doe
+@jwt_token=YOUR_JWT_TOKEN_HERE
+@book_id=YOUR_BOOK_ID_HERE
+@sample_book_title=The Great Gatsby
+@sample_book_year=1925
+@sample_book_author=F. Scott Fitzgerald
+@sample_book_description=A classic American novel about the Jazz Age
+@sample_book_title_2=1984
+@sample_book_year_2=1949
+@sample_book_author_2=George Orwell
+@sample_book_description_2=A dystopian social science fiction novel
+@sample_book_title_3=Pride and Prejudice
+@sample_book_year_3=1813
+@sample_book_author_3=Jane Austen
+@sample_book_description_3=A romantic novel of manners
+@prometheus_url=http://localhost:9090
+@grafana_url=http://localhost:3000
+
+### Quick Test with Variables
+### This file demonstrates all the working variables
+
+### Test 1: Health checks with variables
+GET {{auth_url}}/api/v1/health
+
+###
+
+GET {{books_url}}/api/v1/health
+
+###
+
+GET {{hello_world_url}}/health
+
+###
+
+### Test 2: Register with variables
+POST {{auth_url}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{test_email}}",
+  "password": "{{test_password}}",
+  "firstName": "{{test_first_name}}",
+  "lastName": "{{test_last_name}}"
+}
+
+###
+
+### Test 3: Login with variables
+POST {{auth_url}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{test_email}}",
+  "password": "{{test_password}}"
+}
+
+###
+
+### Test 4: Create book with sample data (requires JWT token)
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "{{sample_book_title}}",
+  "year": "{{sample_book_year}}",
+  "author": "{{sample_book_author}}",
+  "description": "{{sample_book_description}}"
+}
+
+###
+
+### Test 5: Create another book with different sample data
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "{{sample_book_title_2}}",
+  "year": "{{sample_book_year_2}}",
+  "author": "{{sample_book_author_2}}",
+  "description": "{{sample_book_description_2}}"
+}
+
+###
+
+### Test 6: Create minimal book
+POST {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "title": "{{sample_book_title_3}}",
+  "year": "{{sample_book_year_3}}",
+  "author": "{{sample_book_author_3}}"
+}
+
+###
+
+### Test 7: List all books
+GET {{books_url}}/api/v1/books
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Test 8: Check metrics
+GET {{books_url}}/api/v1/metrics
+
+###
+
+GET {{auth_url}}/api/v1/metrics
+
+###
+
+### Test 9: Prometheus and Grafana (if running)
+GET {{prometheus_url}}/api/v1/targets
+
+###
+
+GET {{grafana_url}}/api/health
