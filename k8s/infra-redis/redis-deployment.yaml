@@ -53,7 +53,7 @@ spec:
                 - ping
             initialDelaySeconds: 5
             periodSeconds: 5
-        volumes:
-          - name: redis-storage
-            persistentVolumeClaim:
-              claimName: redis-pvc
+      volumes:
+        - name: redis-storage
+          persistentVolumeClaim:
+            claimName: redis-pvc

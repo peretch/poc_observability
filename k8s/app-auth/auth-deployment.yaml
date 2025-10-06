@@ -58,6 +58,8 @@ spec:
           value: "http://localhost:3000"
         - name: ALLOWED_ORIGINS
           value: "http://localhost:3000,http://localhost:3001"
+        - name: JAEGER_ENDPOINT
+          value: "http://mon-jaeger:14268/api/traces"
         resources:
           requests:
             memory: "256Mi"

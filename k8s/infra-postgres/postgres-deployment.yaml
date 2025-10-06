@@ -58,7 +58,7 @@ spec:
                 - postgres
             initialDelaySeconds: 5
             periodSeconds: 5
-        volumes:
-          - name: postgres-storage
-            persistentVolumeClaim:
-              claimName: postgres-pvc
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc

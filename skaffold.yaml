@@ -39,6 +39,8 @@ deploy:
       - k8s/mon-grafana/mon-grafana-service.yaml
       - k8s/mon-grafana/mon-grafana-datasources.yaml
       - k8s/mon-grafana/mon-grafana-dashboards.yaml
+      - k8s/mon-jaeger/mon-jaeger-deployment.yaml
+      - k8s/mon-jaeger/mon-jaeger-service.yaml
       # Application services
       - k8s/app-hello-world/hello-world-deployment.yaml
       - k8s/app-hello-world/hello-world-service.yaml
@@ -70,6 +72,10 @@ portForward:
     resourceName: mon-grafana
     port: 3000
     localPort: 3000
+  - resourceType: service
+    resourceName: mon-jaeger
+    port: 16686
+    localPort: 16686
   # Infrastructure services (databases)
   - resourceType: service
     resourceName: infra-postgres

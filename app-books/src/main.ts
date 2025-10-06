@@ -1,3 +1,6 @@
+// Importar OpenTelemetry ANTES que cualquier otra cosa
+import './telemetry';
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
